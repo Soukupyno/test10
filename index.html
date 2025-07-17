@@ -138,22 +138,27 @@
   </div>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyD2VESn4b3jQQF9hHdMxh888wCL7_0yLeU",
-      authDomain: "napoje-9b5a8.firebaseapp.com",
-      projectId: "napoje-9b5a8",
-      storageBucket: "napoje-9b5a8.appspot.com",
-      messagingSenderId: "362328854828",
-      appId: "1:362328854828:web:137feb51cd3f79202f5c89",
-      measurementId: "G-P3TVEVEJP6"
-    };
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD2VESn4b3jQQF9hHdMxh888wCL7_0yLeU",
+  authDomain: "napoje-9b5a8.firebaseapp.com",
+  projectId: "napoje-9b5a8",
+  storageBucket: "napoje-9b5a8.firebasestorage.app",
+  messagingSenderId: "362328854828",
+  appId: "1:362328854828:web:387d5228db3684782f5c89",
+  measurementId: "G-7D89QH7RJN"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
     const drinks = [
       { name: "Coca-Cola 0,5l", price: 40, img: "images/cola.png" },
