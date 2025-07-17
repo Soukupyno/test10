@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Výběr nápojů s Firebase - Editace objednávek</title>
   <style>
-    /* ... (styly stejné jako předtím, zkráceno pro přehlednost) ... */
+    /* Styly (beze změny) */
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
       background: #f4f4f4;
     }
-    h1 {
-      color: #333;
-      margin-bottom: 20px;
-    }
+    h1 { color: #333; margin-bottom: 20px; }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -29,17 +26,9 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .item:hover {
-      transform: scale(1.05);
-    }
-    .item img {
-      max-width: 80px;
-      height: auto;
-    }
-    .price {
-      font-weight: bold;
-      margin-top: 5px;
-    }
+    .item:hover { transform: scale(1.05); }
+    .item img { max-width: 80px; height: auto; }
+    .price { font-weight: bold; margin-top: 5px; }
     #cart {
       margin-top: 30px;
       background: white;
@@ -47,9 +36,7 @@
       padding: 15px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    #cart-items {
-      margin-bottom: 15px;
-    }
+    #cart-items { margin-bottom: 15px; }
     .cart-item {
       display: flex;
       justify-content: space-between;
@@ -83,9 +70,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       position: relative;
     }
-    .order h3 {
-      margin: 0 0 5px 0;
-    }
+    .order h3 { margin: 0 0 5px 0; }
     .order ul {
       padding-left: 20px;
       margin: 0 0 5px 0;
@@ -103,22 +88,21 @@
       border: none;
       cursor: pointer;
     }
-    .order-buttons button.edit-btn {
-      background: #3498db;
-      color: white;
-    }
-    .order-buttons button.delete-btn {
-      background: #e74c3c;
-      color: white;
-    }
+    .order-buttons button.edit-btn { background: #3498db; color: white; }
+    .order-buttons button.delete-btn { background: #e74c3c; color: white; }
     #edit-mode-label {
       color: #e67e22;
       font-weight: bold;
     }
   </style>
+
+  <!-- Firebase SDKs (CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
-<p>Test načtení</p>
   <h1>Výběr nápojů</h1>
 
   <div class="grid" id="items-grid"></div>
@@ -137,28 +121,21 @@
     <div id="orders-container"></div>
   </div>
 
-  <!-- Firebase SDK -->
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  <script>
+    // Firebase konfigurace
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2VESn4b3jQQF9hHdMxh888wCL7_0yLeU",
+      authDomain: "napoje-9b5a8.firebaseapp.com",
+      projectId: "napoje-9b5a8",
+      storageBucket: "napoje-9b5a8.appspot.com",
+      messagingSenderId: "362328854828",
+      appId: "1:362328854828:web:387d5228db3684782f5c89",
+      measurementId: "G-7D89QH7RJN"
+    };
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyD2VESn4b3jQQF9hHdMxh888wCL7_0yLeU",
-  authDomain: "napoje-9b5a8.firebaseapp.com",
-  projectId: "napoje-9b5a8",
-  storageBucket: "napoje-9b5a8.firebasestorage.app",
-  messagingSenderId: "362328854828",
-  appId: "1:362328854828:web:387d5228db3684782f5c89",
-  measurementId: "G-7D89QH7RJN"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const db = firebase.firestore();
 
     const drinks = [
       { name: "Coca-Cola 0,5l", price: 40, img: "images/cola.png" },
@@ -229,7 +206,6 @@ const analytics = getAnalytics(app);
         cartItemsDiv.appendChild(div);
       }
       totalDiv.textContent = `Celkem: ${total} Kč`;
-
       saveOrderBtn.disabled = (total === 0);
     }
 
@@ -272,11 +248,9 @@ const analytics = getAnalytics(app);
 
       try {
         if (editingOrderId) {
-          // Update existující objednávku podle ID
           await db.collection("orders").doc(editingOrderId).update(order);
           alert("Objednávka upravena.");
         } else {
-          // Přidat novou objednávku
           await db.collection("orders").add(order);
           alert("Objednávka uložena.");
         }
@@ -323,7 +297,6 @@ const analytics = getAnalytics(app);
           </div>
         `;
 
-        // Edit button event
         orderDiv.querySelector(".edit-btn").onclick = () => {
           cart = {};
           data.items.forEach(i => {
@@ -335,14 +308,12 @@ const analytics = getAnalytics(app);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // Delete button event
         orderDiv.querySelector(".delete-btn").onclick = async () => {
           if (confirm("Opravdu chcete smazat tuto objednávku?")) {
             try {
               await db.collection("orders").doc(orderId).delete();
               alert("Objednávka smazána.");
-              if(editingOrderId === orderId) {
-                // Zrušíme úpravu pokud byla právě tahle objednávka editována
+              if (editingOrderId === orderId) {
                 cart = {};
                 editingOrderId = null;
                 updateEditMode(false);
@@ -358,7 +329,7 @@ const analytics = getAnalytics(app);
       });
     }
 
-    // Posloucháme realtime aktualizace z Firestore
+    // Realtime aktualizace objednávek
     db.collection("orders").orderBy("createdAt", "desc").onSnapshot(snapshot => {
       renderOrders(snapshot.docs);
     });
@@ -366,10 +337,7 @@ const analytics = getAnalytics(app);
     // Inicializace
     renderItems();
     renderCart();
-
-    // Aby funkce removeFromCart byla dostupná z onclick vygenerovaném v HTML
     window.removeFromCart = removeFromCart;
   </script>
-
 </body>
 </html>
